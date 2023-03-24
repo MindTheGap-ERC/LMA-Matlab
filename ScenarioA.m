@@ -1,0 +1,107 @@
+%% Parameters for Scenario A
+%Taken from table 1 (p. 7)
+CA0=0.6;
+CAIni=CA0;
+CC0=0.3;
+CCIni=CC0;
+cCa0=0.326;
+cCaIni=cCa0;
+cCO30=0.326;
+cCO3Ini=cCO30;
+Phi0=0.60;
+PhiIni=0.50;
+ShallowLimit=50; %table 1
+DeepLimit=150; %table 1
+sedimentationrate=0.1;
+m1=2.48;
+m2=m1;
+n1=2.80;
+n2=n1;
+KA=10^(-6.19); %table 1
+KC=10^(-6.37);
+rhos0=2.95*CA0 + 2.71*CC0 + 2.8*(1-(CA0+ CC0));
+rhos=rhos0;
+rhow=1.023;
+beta=0.1;
+D0Ca=131.9;
+k1=1; %table 1
+k2=k1;
+k3=0.01;
+k4=k3;
+muA=100.09;
+DCa=131.9;
+DCO3=272.6;
+b=5; %p. 7
+PhiNR=Phi0; %p. 5
+PhiInfty=0.01; %p. 7
+depths=0:2:500;
+%% Define Initial Conditions
+%Initial conditions: homogeneous sediment at all depths (eqs 36)
+AragoniteInitial = @(depth) CAIni;
+CalciteInitial = @(depth) CCIni;
+CaInitial = @(depth) cCaIni;
+CO3Initial = @(depth) cCO3Ini;
+PorInitial = @(depth) PhiIni;
+
+%% Define Boundary Conditions
+% Boundary conditions: Constant support of input at the sediment-water interface (eqs. 35)
+% Lack of diffusive flux at the bottom is hardcoded into the function LMAHeureux
+AragoniteSurface = @(time) CA0;
+CalciteSurface= @(time) CC0;
+CaSurface = @(time) cCa0;
+CO3Surface = @(time) cCO30;
+PorSurface = @(time) Phi0;
+
+%% Define Aragonite Dissolution Zone
+%ep=5;
+%AragoniteDissolution=@(depth) interp1([ShallowLimit-ep,ShallowLimit+ep,DeepLimit-ep,DeepLimit+ep],[0,1,1,0],depth,'linear',0);
+AragoniteDissolution=@(depth) double(depth>=ShallowLimit & depth <= DeepLimit);
+%% analyse
+options = odeset('MaxStep',1e-6,'RelTol',1e-6,'AbsTol',1e-12);
+times=[0:10:100];
+%%
+sol=LMAHeureuxV31(AragoniteInitial,CalciteInitial,CaInitial,CO3Initial,PorInitial,AragoniteSurface,CalciteSurface,CaSurface,CO3Surface,PorSurface,ShallowLimit,DeepLimit,times,depths,sedimentationrate,k1,k2,k3,k4,m1,m2,n1,n2,b,beta,rhos,rhow,rhos0,KA,KC,muA,D0Ca,PhiNR,PhiInfty,options,Phi0,DCa,DCO3);
+
+%% plot results
+%through time
+timeslice=10;
+plot(depths,sol(timeslice,:,5))
+
+%% Componentwise Plots
+timeslice=5;
+tiledlayout(5,1)
+
+nexttile
+plot(depths,sol(timeslice,:,1));
+xlabel('Depth (cm)')
+title('Aragonite')
+ylim([0,1])
+xlim([0,max(depths)])
+
+nexttile
+plot(depths,sol(timeslice,:,2));
+xlabel('Depth (cm)')
+title('Calcite')
+ylim([0,1])
+xlim([0,max(depths)])
+
+nexttile
+plot(depths,sol(timeslice,:,3));
+xlabel('Depth (cm)')
+title('Ca')
+xlim([0,max(depths)])
+
+nexttile
+plot(depths,sol(timeslice,:,4));
+xlabel('Depth (cm)')
+title('CO3')
+xlim([0,max(depths)])
+
+nexttile
+plot(depths,sol(timeslice,:,5));
+xlabel('Depth (cm)')
+title('Porosity')
+ylim([0,1])
+xlim([0,max(depths)])
+sgtitle(join([num2str(times(timeslice)),' Years']))
+
