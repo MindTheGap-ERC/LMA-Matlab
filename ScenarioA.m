@@ -8,8 +8,8 @@ cCa0=0.326;
 cCaIni=cCa0;
 cCO30=0.326;
 cCO3Ini=cCO30;
-Phi0=0.60;
-PhiIni=0.50;
+Phi0=0.80;
+PhiIni=0.80;
 ShallowLimit=50; %table 1
 DeepLimit=150; %table 1
 sedimentationrate=0.1;
@@ -31,9 +31,9 @@ k4=k3;
 muA=100.09;
 DCa=131.9;
 DCO3=272.6;
-b=5; %p. 7
+b=5e-004; %p. 7
 PhiNR=Phi0; %p. 5
-PhiInfty=0.01; %p. 7
+PhiInfty=0.02; %p. 7
 depths=0:2:500;
 %% Define Initial Conditions
 %Initial conditions: homogeneous sediment at all depths (eqs 36)
@@ -58,17 +58,17 @@ PorSurface = @(time) Phi0;
 AragoniteDissolution=@(depth) double(depth>=ShallowLimit & depth <= DeepLimit);
 %% analyse
 options = odeset('MaxStep',1e-6,'RelTol',1e-6,'AbsTol',1e-12);
-times=0:10:100;
+times=0:10:1000;
 %%
 sol=LMAHeureuxPorosityDiffV2(AragoniteInitial,CalciteInitial,CaInitial,CO3Initial,PorInitial,AragoniteSurface,CalciteSurface,CaSurface,CO3Surface,PorSurface,times,depths,sedimentationrate,k1,k2,k3,k4,m1,m2,n1,n2,b,beta,rhos,rhow,rhos0,KA,KC,muA,D0Ca,PhiNR,PhiInfty,options,Phi0,DCa,DCO3,DeepLimit,ShallowLimit);
 
 %% plot results
 %through time
-timeslice=10;
+timeslice=100;
 plot(depths,sol(timeslice,:,5))
 
 %% Componentwise Plots
-timeslice=5;
+timeslice=50;
 tiledlayout(5,1)
 
 nexttile
