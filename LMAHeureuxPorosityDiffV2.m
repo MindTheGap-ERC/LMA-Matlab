@@ -1,8 +1,8 @@
 function sol=LMAHeureuxPorosityDiffV2(AragoniteInitial,CalciteInitial,CaInitial,CO3Initial,PorInitial,AragoniteSurface,CalciteSurface,CaSurface,CO3Surface,PorSurface,times,depths,sedimentationrate,k1,k2,k3,k4,m1,m2,n1,n2,b,beta,rhos,rhow,rhos0,KA,KC,muA,D0Ca,PhiNR,PhiInfty,options,Phi0,DCa,DCO3,DeepLimit,ShallowLimit)
 %% Define Local constants
-Xstar=D0Ca/sedimentationrate; % eq 39
+Xstar=D0Ca./sedimentationrate; % eq 39
 Tstar=Xstar/sedimentationrate; % eq 39
-xmesh=depths/Xstar; %p. 6
+xmesh=depths./Xstar; %p. 6
 tspan=times/Tstar; % p. 6
 Da=k2*Tstar; %eq. 44
 lambda=k3/k2; %eq. 44
@@ -39,7 +39,7 @@ cCO3=u(4);
 Phi=u(5);
 %formulas for compact representation
 %dPhi=(auxcon*((Phi^3)/(1-Phi))*(1-exp(10-10/Phi))); % eq. 25 + 17 in comb with eq. 44 
-dPhislash=(auxcon*(Phi/((1-Phi)^2))*(exp(10-10/Phi)*(2*Phi^2+7*Phi-10) + Phi*(3-2*Phi)));
+dPhi_const=auxcon*Phi0^3 % Updated according to the new Fortran code from Jan 2023
 %OmegaPA=max(0,cCa*cCO3*KRat-1)^m1; %eq. 45
 %OmegaDA=(max(0,1-cCa*cCO3*KRat)^m2)*(x*Xstar <= DeepLimit && x*Xstar >= ShallowLimit); %eq. 45
 %OmegaPC=max(0,cCa*cCO3-1)^n1; %eq. 45
@@ -56,7 +56,7 @@ s=[ (-U*dudx(1) -Da*((1-CA)*coA + lambda*CA*coC));...
     (-U*dudx(2) + Da*(lambda*(1-CC)*coC + CC*coA));...
     (-Phi*W*dudx(3)+ Da*(1-Phi)*(delta-cCa)*(coA-lambda*coC));...
     (-Phi*W*dudx(4)+ Da*(1-Phi)*(delta-cCO3)*(coA-lambda*coC));...
-    (Da*(1-Phi)*(coA-lambda*coC)- dudx(5)*(W+Wslash*Phi+dudx(5)*dPhislash))];
+    (Da*(1-Phi)*(coA-lambda*coC)- dudx(5)*(W+Wslash*Phi+dudx(5)*dPhi_const))];
 end
 %% Solve PDE
 sol= pdepe(0,@PDEDef,InitialConditions,@BoundaryConditions,xmesh,tspan,options);
