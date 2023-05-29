@@ -53,14 +53,13 @@ CO3Surface = @(time) cCO30;
 PorSurface = @(time) Phi0;
 
 %% Define Aragonite Dissolution Zone
-%ep=5;
-%AragoniteDissolution=@(depth) interp1([ShallowLimit-ep,ShallowLimit+ep,DeepLimit-ep,DeepLimit+ep],[0,1,1,0],depth,'linear',0);
 AragoniteDissolution=@(depth) double(depth>=ShallowLimit & depth <= DeepLimit);
 %% analyse
+% options for ode solver
 options = odeset('MaxStep',1e-6,'RelTol',1e-6,'AbsTol',1e-12);
-times=0:10:1000;
+times=linspace(0,10000,100);
 %%
-sol=LMAHeureuxPorosityDiffV2(AragoniteInitial,CalciteInitial,CaInitial,CO3Initial,PorInitial,AragoniteSurface,CalciteSurface,CaSurface,CO3Surface,PorSurface,times,depths,sedimentationrate,k1,k2,k3,k4,m1,m2,n1,n2,b,beta,rhos,rhow,rhos0,KA,KC,muA,D0Ca,PhiNR,PhiInfty,options,Phi0,DCa,DCO3,DeepLimit,ShallowLimit);
+sol=LMAHeureuxPorosityDiffV2(AragoniteInitial,CalciteInitial,CaInitial,CO3Initial,PorInitial,AragoniteSurface,CalciteSurface,CaSurface,CO3Surface,PorSurface,times,depths,sedimentationrate,k1,k2,k3,k4,m1,m2,n1,n2,b,beta,rhos,rhow,rhos0,KA,KC,muA,D0Ca,PhiNR,PhiInfty,options,Phi0,DCa,DCO3,DeepLimit,ShallowLimit, PhiIni);
 
 %% plot results
 %through time
@@ -68,7 +67,7 @@ timeslice=100;
 plot(depths,sol(timeslice,:,5))
 
 %% Componentwise Plots
-timeslice=50;
+timeslice=80;
 tiledlayout(5,1)
 
 nexttile
