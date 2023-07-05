@@ -37,18 +37,17 @@ PhiInfty=0.02; %p. 7
 depths=0:2:500;
 
 % parameters for initial porosity profile according to https://github.com/MindTheGap-ERC/LHeureuxEqs
-% TODO: Introduce empirically realistic values
+% values 
 a_por = 0.3;
-b_por = 0.01;
-c_por = 0.5;
-% To use old parametrization, use a_por = b_por = 0 and c_por = PhiIni
+b_por = 1;
+c+por = 0.5;
 %% Define Initial Conditions
 %Initial conditions: homogeneous sediment at all depths (eqs 36)
 AragoniteInitial = @(depth) CAIni;
 CalciteInitial = @(depth) CCIni;
 CaInitial = @(depth) cCaIni;
 CO3Initial = @(depth) cCO3Ini;
-PorInitial = @(depth) c_por + a_por * exp(-depth .* b_por);
+PorInitial = @(depth) PhiIni;
 
 %% Define Boundary Conditions
 % Boundary conditions: Constant support of input at the sediment-water interface (eqs. 35)
