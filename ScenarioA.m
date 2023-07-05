@@ -10,8 +10,8 @@ cCO30=0.326;
 cCO3Ini=cCO30;
 Phi0=0.80;
 PhiIni=0.80;
-ShallowLimit=150; %table 1
-DeepLimit=250; %table 1
+ShallowLimit=50; %table 1
+DeepLimit=150; %table 1
 sedimentationrate=0.1;
 m1=2.48;
 m2=m1;
@@ -36,6 +36,10 @@ PhiNR=Phi0; %p. 5
 PhiInfty=0.02; %p. 7
 depths=0:2:500;
 
+% turn aragonite dissolution on/off. Has no influence in shape of ADZ or
+% other reaction rates
+dissolve_aragonite = false;
+
 % parameters for initial porosity profile according to https://github.com/MindTheGap-ERC/LHeureuxEqs
 % TODO: Introduce empirically realistic values
 a_por = 0.3;
@@ -59,22 +63,20 @@ CaSurface = @(time) cCa0;
 CO3Surface = @(time) cCO30;
 PorSurface = @(time) Phi0;
 
-%% Define Aragonite Dissolution Zone
-AragoniteDissolution=@(depth) double(depth>=ShallowLimit & depth <= DeepLimit);
 %% analyse
 % options for ode solver
-options = odeset('MaxStep',1e-6,'RelTol',1e-6,'AbsTol',1e-12);
+options = odeset('MaxStep',1e-6,'RelTol',1e-6,'AbsTol',1e-9);
 times=linspace(0,10000,100);
 %%
-sol=LMAHeureuxPorosityDiffV2(AragoniteInitial,CalciteInitial,CaInitial,CO3Initial,PorInitial,AragoniteSurface,CalciteSurface,CaSurface,CO3Surface,PorSurface,times,depths,sedimentationrate,k1,k2,k3,k4,m1,m2,n1,n2,b,beta,rhos,rhow,rhos0,KA,KC,muA,D0Ca,PhiNR,PhiInfty,options,Phi0,DCa,DCO3,DeepLimit,ShallowLimit, PhiIni);
+sol=LMAHeureuxPorosityDiffV2(AragoniteInitial,CalciteInitial,CaInitial,CO3Initial,PorInitial,AragoniteSurface,CalciteSurface,CaSurface,CO3Surface,PorSurface,times,depths,sedimentationrate,k1,k2,k3,k4,m1,m2,n1,n2,b,beta,rhos,rhow,rhos0,KA,KC,muA,D0Ca,PhiNR,PhiInfty,options,Phi0,DCa,DCO3,DeepLimit,ShallowLimit, PhiIni,dissolve_aragonite);
 
 %% plot results
 %through time
-timeslice=80;
+timeslice=76;
 plot(depths,sol(timeslice,:,5))
 
 %% Componentwise Plots
-timeslice=80;
+timeslice=76;
 tiledlayout(5,1)
 
 nexttile
