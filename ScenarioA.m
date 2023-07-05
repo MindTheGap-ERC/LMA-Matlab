@@ -38,12 +38,15 @@ depths=0:2:500;
 
 % turn aragonite dissolution on/off. Has no influence in shape of ADZ or
 % other reaction rates
-dissolve_aragonite = false;
+dissolve_aragonite = true;
+
+% turn off all reaction terms. Overrules dissolve_aragonite
+include_reactions = true;
 
 % parameters for initial porosity profile according to https://github.com/MindTheGap-ERC/LHeureuxEqs
 % TODO: Introduce empirically realistic values
 a_por = 0.3;
-b_por = 0.01;
+b_por = 10;
 c_por = 0.5;
 % To use old parametrization, use a_por = b_por = 0 and c_por = PhiIni
 %% Define Initial Conditions
@@ -53,7 +56,7 @@ CalciteInitial = @(depth) CCIni;
 CaInitial = @(depth) cCaIni;
 CO3Initial = @(depth) cCO3Ini;
 PorInitial = @(depth) c_por + a_por * exp(-depth .* b_por);
-
+% plot(depths, PorInitial(depths))
 %% Define Boundary Conditions
 % Boundary conditions: Constant support of input at the sediment-water interface (eqs. 35)
 % Lack of diffusive flux at the bottom is hardcoded into the function LMAHeureux
@@ -65,18 +68,18 @@ PorSurface = @(time) Phi0;
 
 %% analyse
 % options for ode solver
-options = odeset('MaxStep',1e-6,'RelTol',1e-6,'AbsTol',1e-9);
+options = odeset('RelTol',1e-6,'AbsTol',1e-9);
 times=linspace(0,10000,100);
 %%
-sol=LMAHeureuxPorosityDiffV2(AragoniteInitial,CalciteInitial,CaInitial,CO3Initial,PorInitial,AragoniteSurface,CalciteSurface,CaSurface,CO3Surface,PorSurface,times,depths,sedimentationrate,k1,k2,k3,k4,m1,m2,n1,n2,b,beta,rhos,rhow,rhos0,KA,KC,muA,D0Ca,PhiNR,PhiInfty,options,Phi0,DCa,DCO3,DeepLimit,ShallowLimit, PhiIni,dissolve_aragonite);
+sol=LMAHeureuxPorosityDiffV2(AragoniteInitial,CalciteInitial,CaInitial,CO3Initial,PorInitial,AragoniteSurface,CalciteSurface,CaSurface,CO3Surface,PorSurface,times,depths,sedimentationrate,k1,k2,k3,k4,m1,m2,n1,n2,b,beta,rhos,rhow,rhos0,KA,KC,muA,D0Ca,PhiNR,PhiInfty,options,Phi0,DCa,DCO3,DeepLimit,ShallowLimit, PhiIni,dissolve_aragonite, include_reactions);
 
 %% plot results
 %through time
-timeslice=76;
+timeslice=1;
 plot(depths,sol(timeslice,:,5))
 
 %% Componentwise Plots
-timeslice=76;
+timeslice=80;
 tiledlayout(5,1)
 
 nexttile
