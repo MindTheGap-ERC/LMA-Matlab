@@ -41,7 +41,7 @@ cCa=u(3);
 cCO3=u(4);
 Phi=u(5);
 %formulas for compact representation
-difpor =100.*beta*PhiIni^3/((PhiIni-PhiInfty)*b*rhow*9.8*(1-PhiIni))/DCa ; % porosity diffusion
+difpor = beta * (PhiIni^3/(1-PhiIni)) * ( 1 /  (b * rhow * g * (PhiNR-PhiInfty))) *  (1 - exp( - 10 * (1-PhiIni)/PhiIni))  * (1 / DCa) ; % porosity diffusion
 %dPhi=(auxcon*((Phi^3)/(1-Phi))*(1-exp(10-10/Phi))); % eq. 25 + 17 in comb with eq. 44 
 %dPhi_const=auxcon*Phi0^3; % Updated according to the new Fortran code from Jan 2023
 %OmegaPA=max(0,cCa*cCO3*KRat-1)^m1; %eq. 45
