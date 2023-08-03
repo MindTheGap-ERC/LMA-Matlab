@@ -32,8 +32,8 @@ muA=100.09;
 DCa=131.9;
 DCO3=272.6;
 b=5e-004; %p. 7
-PhiNR=Phi0; %p. 5
-PhiInfty=0.02; %p. 7
+PhiNR=PhiIni; %p. 5
+PhiInfty=0.01; %p. 7
 depths=0:2:500;
 
 % turn aragonite dissolution on/off. Has no influence in shape of ADZ or
