@@ -41,15 +41,16 @@ cCa=u(3);
 cCO3=u(4);
 Phi=u(5);
 %formulas for compact representation
+ % eq. 25 + 17 in comb with eq. 44 
 difpor = beta * (PhiIni^3/(1-PhiIni)) * ( 1 /  (b * rhow * g * (PhiNR-PhiInfty))) *  (1 - exp( - 10 * (1-PhiIni)/PhiIni))  * (1 / DCa) ; % porosity diffusion
-%dPhi=(auxcon*((Phi^3)/(1-Phi))*(1-exp(10-10/Phi))); % eq. 25 + 17 in comb with eq. 44 
+%dPhi=(auxcon*((Phi^3)/(1-Phi))*(1-exp(10-10/Phi)));
 %dPhi_const=auxcon*Phi0^3; % Updated according to the new Fortran code from Jan 2023
-%OmegaPA=max(0,cCa*cCO3*KRat-1)^m1; %eq. 45
-%OmegaDA=(max(0,1-cCa*cCO3*KRat)^m2)*(x*Xstar <= DeepLimit && x*Xstar >= ShallowLimit); %eq. 45
-%OmegaPC=max(0,cCa*cCO3-1)^n1; %eq. 45
-%OmegaDC=max(0,1-cCa*cCO3)^n2; %eq. 45
-coA=CA*(((max(0,1-cCa*cCO3*KRat)^m2)*double(dissolve_aragonite)*(x*Xstar <= DeepLimit && x*Xstar >= ShallowLimit))-nu1*(max(0,cCa*cCO3*KRat-1)^m1));
-coC=CC*((max(0,cCa*cCO3-1)^n1)-nu2*(max(0,1-cCa*cCO3)^n2));
+OmegaPA=max(0,cCa*cCO3*KRat-1)^m1; %eq. 45
+OmegaDA=(max(0,1-cCa*cCO3*KRat)^m2)*(x <= DeepLimit/Xstar && x >= ShallowLimit/Xstar)*double(dissolve_aragonite); %eq. 45
+OmegaPC=max(0,cCa*cCO3-1)^n1; %eq. 45
+OmegaDC=max(0,1-cCa*cCO3)^n2; %eq. 45
+coA=CA*(OmegaDA-nu1*OmegaPA);
+coC=CC*(OmegaPC-nu2*OmegaDC);
 U=(presum + rhorat*Phi^3*(1-exp(10-10/Phi))/(1-Phi)) ;%eqs 17,15, 46
 W=(presum -rhorat*Phi^2*(1-exp(10-10/Phi))); %eqs 17,15, 47
 %Wslash=-rhorat*2*(Phi-(Phi+5)*exp(10-10/Phi));
