@@ -45,9 +45,9 @@ include_reactions = true;
 
 % parameters for initial porosity profile according to https://github.com/MindTheGap-ERC/LHeureuxEqs
 % TODO: Introduce empirically realistic values
-a_por = 0.3;
-b_por = 10;
-c_por = 0.5;
+a_por = 0;
+b_por = 0;
+c_por = PhiIni;
 % To use old parametrization, use a_por = b_por = 0 and c_por = PhiIni
 %% Define Initial Conditions
 %Initial conditions: homogeneous sediment at all depths (eqs 36)
