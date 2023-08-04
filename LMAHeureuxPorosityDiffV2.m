@@ -1,9 +1,4 @@
 function sol=LMAHeureuxPorosityDiffV2(AragoniteInitial,CalciteInitial,CaInitial,CO3Initial,PorInitial,AragoniteSurface,CalciteSurface,CaSurface,CO3Surface,PorSurface,times,depths,sedimentationrate,k1,k2,k3,k4,m1,m2,n1,n2,b,beta,rhos,rhow,rhos0,KA,KC,muA,D0Ca,PhiNR,PhiInfty,options,Phi0,DCa,DCO3,DeepLimit,ShallowLimit, PhiIni, dissolve_aragonite,include_reactions)
-%% Auxiliary functions
-F_eq_17 = @(Phi) 1 - exp(- 10 * (1- Phi) / Phi);
-
-K_eq_15 = @(Phi) beta * Phi ^3 * F_eq_17(Phi) / ((1 - Phi)^2) ;
-
 %% Define Local constants
 Xstar=D0Ca./sedimentationrate; % eq 39
 Tstar=Xstar/sedimentationrate; % eq 39
@@ -21,11 +16,8 @@ g=100*9.81; % gravity in cm/s^2
 %auxcon=beta/(D0Ca*b*g*rhow*(PhiNR-PhiInfty)); %coeff. from eq. 25 combined with eq 44
 rhorat0=(rhos0/rhow-1)*beta/sedimentationrate ; % coefficient in eq. 46, 47
 rhorat=(rhos/rhow-1)*beta/sedimentationrate; % coefficient in eq. 46, 47
-presum= 1-rhorat0 * (1-Phi0) * K_eq_15(Phi0); % first part in eqs 46, 47
+presum= 1-rhorat0*Phi0^3*(1-exp(10-10/Phi0))/(1-Phi0); % first part in eqs 46, 47
 reaction_switch = double(include_reactions);
-
-U_eq_46 = @(Phi) presum + rhorat * K_eq_15(Phi) * (1-Phi) ;%eqs 17,15, 46
-W_eq_47 = @(Phi) presum - rhorat * K_eq_15(Phi) * (1-Phi)^2 / Phi; %eqs 17,15, 47
 %% Define Initial conditions
 InitialConditions=@(depth) [AragoniteInitial(depth/Xstar);CalciteInitial(depth/Xstar);CaInitial(depth/Xstar);CO3Initial(depth/Xstar);PorInitial(depth/Xstar)];
 
@@ -50,7 +42,7 @@ cCO3=u(4);
 Phi=u(5);
 %formulas for compact representation
  % eq. 25 + 17 in comb with eq. 44 
-difpor = beta * (PhiIni^3/(1-PhiIni)) * ( 1 /  (b * rhow * g * (PhiNR-PhiInfty))) *  F_eq_17(PhiIni) * (1 / DCa) ; % porosity diffusion
+difpor = beta * (PhiIni^3/(1-PhiIni)) * ( 1 /  (b * rhow * g * (PhiNR-PhiInfty))) *  (1 - exp( - 10 * (1-PhiIni)/PhiIni))  * (1 / DCa) ; % porosity diffusion
 %dPhi=(auxcon*((Phi^3)/(1-Phi))*(1-exp(10-10/Phi)));
 %dPhi_const=auxcon*Phi0^3; % Updated according to the new Fortran code from Jan 2023
 OmegaPA=max(0,cCa*cCO3*KRat-1)^m1; %eq. 45
@@ -59,9 +51,8 @@ OmegaPC=max(0,cCa*cCO3-1)^n1; %eq. 45
 OmegaDC=max(0,1-cCa*cCO3)^n2; %eq. 45
 coA=CA*(OmegaDA-nu1*OmegaPA);
 coC=CC*(OmegaPC-nu2*OmegaDC);
-U = U_eq_46(Phi);
-W = W_eq_47(Phi);
-
+U=(presum + rhorat*Phi^3*(1-exp(10-10/Phi))/(1-Phi)) ;%eqs 17,15, 46
+W=(presum -rhorat*Phi^2*(1-exp(10-10/Phi))); %eqs 17,15, 47
 %Wslash=-rhorat*2*(Phi-(Phi+5)*exp(10-10/Phi));
 %Describe eqs. 40 to 43
 c=[1;1;Phi;Phi;1]; %left side
