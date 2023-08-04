@@ -22,19 +22,19 @@ reaction_switch = double(include_reactions);
 InitialConditions=@(depth) [AragoniteInitial(depth/Xstar);CalciteInitial(depth/Xstar);CaInitial(depth/Xstar);CO3Initial(depth/Xstar);PorInitial(depth/Xstar)];
 
 %% Define Boundary conditions
-function [pl,ql,pr,qr] = BoundaryConditions(xl,ul,xr,ur,t)
+function [pl,ql,pr,qr] = BoundaryConditions(~,ul,~,ur,t)
 %eq. 35 top
 ql=[0;0;0;0;0];
 pl=[ul(1)-AragoniteSurface(t);ul(2)-CalciteSurface(t);ul(3)-CaSurface(t);ul(4)-CO3Surface(t);ul(5)-PorSurface(t)]; 
 % eq 35 bottom
-Phi_bot = ur[5];
-W_bot=(presum -rhorat*Phi_bot^2*(1-exp(10-10/Phi_bot))):
-pr=[0;0;0;0;W * Phi_bot];
+Phi_bot = ur(5);
+W_bot=(presum -rhorat*Phi_bot^2*(1-exp(10-10/Phi_bot)));
+pr=[0;0;0;0;W_bot * Phi_bot];
 
 qr=[1;1;1;1;1]; 
 end
 %% Define System of PDEs
-function [c,f,s]=PDEDef(x,t,u,dudx)
+function [c,f,s]=PDEDef(x,~,u,dudx)
 %%System of PDEs of LHeureux, described in eqs. 40 to 43
 %abbreciations for readability
 CA=u(1);
