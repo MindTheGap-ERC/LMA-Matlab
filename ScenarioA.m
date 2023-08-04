@@ -1,12 +1,13 @@
 %% Parameters for Scenario A
 %Taken from table 1 (p. 7)
+KC=10^(-6.37);
 CA0=0.6;
 CAIni=CA0;
 CC0=0.3;
 CCIni=CC0;
-cCa0=0.326;
+cCa0=0.326e-3/sqrt(KC);
 cCaIni=cCa0;
-cCO30=0.326;
+cCO30=0.326e-3/sqrt(KC);
 cCO3Ini=cCO30;
 Phi0=0.80;
 PhiIni=0.80;
@@ -18,7 +19,7 @@ m2=m1;
 n1=2.80;
 n2=n1;
 KA=10^(-6.19); %table 1
-KC=10^(-6.37);
+
 rhos0=2.95*CA0 + 2.71*CC0 + 2.8*(1-(CA0+ CC0));
 rhos=rhos0;
 rhow=1.023;
@@ -26,7 +27,7 @@ beta=0.1;
 D0Ca=131.9;
 k1=1; %table 1
 k2=k1;
-k3=0.01;
+k3=0.1;
 k4=k3;
 muA=100.09;
 DCa=131.9;
@@ -79,7 +80,7 @@ timeslice=1;
 plot(depths,sol(timeslice,:,5))
 
 %% Componentwise Plots
-timeslice=80;
+timeslice=7;
 tiledlayout(5,1)
 
 nexttile
