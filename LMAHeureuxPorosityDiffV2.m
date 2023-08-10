@@ -53,15 +53,15 @@ OmegaPC=max(0,cCa*cCO3-1)^n1; %eq. 45
 OmegaDC=max(0,1-cCa*cCO3)^n2; %eq. 45
 coA=CA*(OmegaDA-nu1*OmegaPA);
 coC=CC*(OmegaPC-nu2*OmegaDC);
-U=(presum + rhorat*Phi^3*(1-exp(10-10/Phi))/(1-Phi)) ;%eqs 17,15, 46
+U=presum + rhorat*Phi^3*(1-exp(10-10/Phi))/(1-Phi) ;%eqs 17,15, 46
 W=(presum -rhorat*Phi^2*(1-exp(10-10/Phi))); %eqs 17,15, 47
 %Wslash=-rhorat*2*(Phi-(Phi+5)*exp(10-10/Phi));
 %Describe eqs. 40 to 43
 c=[1;1;Phi;Phi;1]; %left side
 f=[0;... % C Aragonite
    0;... % C Calcite
-   Phi*dCa*dudx(3);... % Ca
-   Phi*dCO3*dudx(4);... % Carbonate
+   Phi*dCa*dudx(3)/(1-2*log(Phi));... % Ca
+   Phi*dCO3*dudx(4)/(1-2*log(Phi));... % Carbonate
    difpor * dudx(5) - W * Phi]; % porosity diffusion 
 %flux terms
 s=[ (-U*dudx(1) + reaction_switch * (-Da*((1-CA)*coA +  lambda*CA*coC)));...
