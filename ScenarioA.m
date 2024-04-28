@@ -69,7 +69,7 @@ PorSurface = @(time) Phi0;
 
 %% analyse
 % options for ode solver
-options = odeset('RelTol',1e-2,'AbsTol',1e-2, 'InitialStep',1e-6,'MaxStep',1e-6, Vectorized='on',BDF='off',NormControl='on');
+options = odeset('RelTol', 1e-2, 'AbsTol', 1e-2, 'InitialStep', 1e-6, 'MaxStep', 1e-5, Vectorized='on', BDF='off', NormControl='on');
 times=linspace(0,13190,100);
 %%
 sol=LMAHeureuxPorosityDiffV2(AragoniteInitial,CalciteInitial,CaInitial,CO3Initial,PorInitial,AragoniteSurface,CalciteSurface,CaSurface,CO3Surface,PorSurface,times,depths,sedimentationrate,k1,k2,k3,k4,m1,m2,n1,n2,b,beta,rhos,rhow,rhos0,KA,KC,muA,D0Ca,PhiNR,PhiInfty,options,Phi0,DCa,DCO3,DeepLimit,ShallowLimit, PhiIni,dissolve_aragonite, include_reactions);
@@ -79,11 +79,15 @@ sol=LMAHeureuxPorosityDiffV2(AragoniteInitial,CalciteInitial,CaInitial,CO3Initia
 timeslice=1;
 plot(depths,sol(timeslice,:,5))
 
-%% Componentwise Plots
+%% Write output to hdf5 file.
 timeslice=100;
-tiledlayout(5,1)
+h5create('Scenario_integrated.h5', '/Solutions after_T*', size(sol(timeslice,:,:))); 
+h5write('Scenario_integrated.h5', '/Solutions after_T*', sol(timeslice,:,:))
 
+%% Componentwise Plots
+tiledlayout(5,1)
 nexttile
+
 plot(depths,sol(timeslice,:,1));
 xlabel('Depth (cm)')
 title('Aragonite')
