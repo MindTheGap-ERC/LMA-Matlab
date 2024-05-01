@@ -1,0 +1,33 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: >-
+  Matlab implementation if the reactive-transport model by
+  L'Heureux (2018)
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Niklas
+    family-names: Hohmann
+    email: n.h.hohmann@uu.nl
+    affiliation: Utrecht University
+    orcid: 'https://orcid.org/0000-0003-1559-1838'
+  - given-names: Hanno
+    family-names: Spreeuw
+    email: h.spreeuw@esciencecenter.nl
+    affiliation: Netherlands eScience Center
+repository-code: 'https://github.com/MindTheGap-ERC/LMA-Matlab'
+keywords:
+  - diagenesis
+  - aragonite
+  - calcite
+  - limestone
+  - calcium carbonate
+  - porosity
+  - dissolution
+  - sedimentology
+  - paleoclimate
+license: Apache-2.0

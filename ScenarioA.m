@@ -9,8 +9,8 @@ cCa0=0.326e-3/sqrt(KC);
 cCaIni=cCa0;
 cCO30=0.326e-3/sqrt(KC);
 cCO3Ini=cCO30;
-Phi0=0.80;
-PhiIni=0.80;
+Phi0=0.50;
+PhiIni=0.50;
 ShallowLimit=50; %table 1
 DeepLimit=150; %table 1
 sedimentationrate=0.1;
@@ -27,7 +27,7 @@ beta=0.1;
 D0Ca=131.9;
 k1=1; %table 1
 k2=k1;
-k3=0.1;
+k3=0.01;
 k4=k3;
 muA=100.09;
 DCa=131.9;
@@ -35,7 +35,7 @@ DCO3=272.6;
 b=5e-004; %p. 7
 PhiNR=PhiIni; %p. 5
 PhiInfty=0.01; %p. 7
-depths=0:2:500;
+depths=0:2.5:500;
 
 % turn aragonite dissolution on/off. Has no influence in shape of ADZ or
 % other reaction rates
@@ -69,8 +69,8 @@ PorSurface = @(time) Phi0;
 
 %% analyse
 % options for ode solver
-options = odeset('RelTol',1e-6,'AbsTol',1e-9);
-times=linspace(0,10000,100);
+options = odeset('RelTol', 1e-2, 'AbsTol', 1e-2, 'InitialStep', 1e-6, 'MaxStep', 1e-5, Vectorized='on', BDF='off', NormControl='on');
+times=linspace(0,13190,100);
 %%
 sol=LMAHeureuxPorosityDiffV2(AragoniteInitial,CalciteInitial,CaInitial,CO3Initial,PorInitial,AragoniteSurface,CalciteSurface,CaSurface,CO3Surface,PorSurface,times,depths,sedimentationrate,k1,k2,k3,k4,m1,m2,n1,n2,b,beta,rhos,rhow,rhos0,KA,KC,muA,D0Ca,PhiNR,PhiInfty,options,Phi0,DCa,DCO3,DeepLimit,ShallowLimit, PhiIni,dissolve_aragonite, include_reactions);
 
@@ -79,11 +79,15 @@ sol=LMAHeureuxPorosityDiffV2(AragoniteInitial,CalciteInitial,CaInitial,CO3Initia
 timeslice=1;
 plot(depths,sol(timeslice,:,5))
 
-%% Componentwise Plots
-timeslice=7;
-tiledlayout(5,1)
+%% Write output to hdf5 file.
+timeslice=100;
+h5create('Scenario_integrated.h5', '/Solutions after_T*', size(sol(timeslice,:,:))); 
+h5write('Scenario_integrated.h5', '/Solutions after_T*', sol(timeslice,:,:))
 
+%% Componentwise Plots
+tiledlayout(5,1)
 nexttile
+
 plot(depths,sol(timeslice,:,1));
 xlabel('Depth (cm)')
 title('Aragonite')
