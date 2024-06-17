@@ -9,8 +9,8 @@ cCa0=0.326e-3/sqrt(KC);
 cCaIni=cCa0;
 cCO30=0.326e-3/sqrt(KC);
 cCO3Ini=cCO30;
-Phi0=0.50;
-PhiIni=0.50;
+Phi0=0.80;
+PhiIni=0.80;
 ShallowLimit=50; %table 1
 DeepLimit=150; %table 1
 sedimentationrate=0.1;
@@ -67,10 +67,11 @@ CaSurface = @(time) cCa0;
 CO3Surface = @(time) cCO30;
 PorSurface = @(time) Phi0;
 
-%% analyse
+%% options for solver and time steps
 % options for ode solver
 options = odeset('RelTol', 1e-2, 'AbsTol', 1e-2, 'InitialStep', 1e-6, 'MaxStep', 1e-5, Vectorized='on', BDF='off', NormControl='on');
-times=linspace(0,13190,100);
+% dimensionless time steps at which the solution is evaluated
+times=linspace(1, 100, 100) * 10^-6; % time (dimensionless)
 %%
 sol=LMAHeureuxPorosityDiffV2(AragoniteInitial,CalciteInitial,CaInitial,CO3Initial,PorInitial,AragoniteSurface,CalciteSurface,CaSurface,CO3Surface,PorSurface,times,depths,sedimentationrate,k1,k2,k3,k4,m1,m2,n1,n2,b,beta,rhos,rhow,rhos0,KA,KC,muA,D0Ca,PhiNR,PhiInfty,options,Phi0,DCa,DCO3,DeepLimit,ShallowLimit, PhiIni,dissolve_aragonite, include_reactions);
 
@@ -80,14 +81,14 @@ timeslice=1;
 plot(depths,sol(timeslice,:,5))
 
 %% Write output to hdf5 file.
-timeslice=100;
-h5create('Scenario_integrated.h5', '/Solutions after_T*', size(sol(timeslice,:,:))); 
-h5write('Scenario_integrated.h5', '/Solutions after_T*', sol(timeslice,:,:))
+% timeslice=2;
+h5create('Scenario_integrated.h5', '/Solutions', size(sol)); 
+h5write('Scenario_integrated.h5', '/Solutions', sol)
 
 %% Componentwise Plots
 tiledlayout(5,1)
 nexttile
-
+timeslice = 80;
 plot(depths,sol(timeslice,:,1));
 xlabel('Depth (cm)')
 title('Aragonite')
@@ -119,5 +120,5 @@ xlabel('Depth (cm)')
 title('Porosity')
 ylim([0,1])
 xlim([0,max(depths)])
-sgtitle(join([num2str(times(timeslice)),' Years']))
+sgtitle(join([num2str(times(timeslice)),' dimless time']))
 
