@@ -44,12 +44,10 @@ dissolve_aragonite = true;
 % turn off all reaction terms. Overrules dissolve_aragonite
 include_reactions = true;
 
-% parameters for initial porosity profile according to https://github.com/MindTheGap-ERC/LHeureuxEqs
-% TODO: Introduce empirically realistic values
+% use initial conditions as in L'Heureux (2018)
 a_por = 0;
 b_por = 0;
 c_por = PhiIni;
-% To use old parametrization, use a_por = b_por = 0 and c_por = PhiIni
 %% Define Initial Conditions
 %Initial conditions: homogeneous sediment at all depths (eqs 36)
 AragoniteInitial = @(depth) CAIni;
@@ -70,10 +68,16 @@ PorSurface = @(time) Phi0;
 %% options for solver and time steps
 % options for ode solver
 options = odeset('RelTol', 1e-2, 'AbsTol', 1e-2, 'InitialStep', 1e-6, 'MaxStep', 1e-5, Vectorized='on', BDF='off', NormControl='on');
+<<<<<<< Updated upstream
 % dimensionless time steps at which the solution is evaluated
 times=linspace(1, 100, 100) * 10^-6; % time (dimensionless)
 %%
 sol=LMAHeureuxPorosityDiffV2(AragoniteInitial,CalciteInitial,CaInitial,CO3Initial,PorInitial,AragoniteSurface,CalciteSurface,CaSurface,CO3Surface,PorSurface,times,depths,sedimentationrate,k1,k2,k3,k4,m1,m2,n1,n2,b,beta,rhos,rhow,rhos0,KA,KC,muA,D0Ca,PhiNR,PhiInfty,options,Phi0,DCa,DCO3,DeepLimit,ShallowLimit, PhiIni,dissolve_aragonite, include_reactions);
+=======
+times=linspace(0,13190,100); % times where solutions is determined
+%% solve PDE system
+sol=LMA_solve(AragoniteInitial,CalciteInitial,CaInitial,CO3Initial,PorInitial,AragoniteSurface,CalciteSurface,CaSurface,CO3Surface,PorSurface,times,depths,sedimentationrate,k1,k2,k3,k4,m1,m2,n1,n2,b,beta,rhos,rhow,rhos0,KA,KC,muA,D0Ca,PhiNR,PhiInfty,options,Phi0,DCa,DCO3,DeepLimit,ShallowLimit, PhiIni,dissolve_aragonite, include_reactions);
+>>>>>>> Stashed changes
 
 %% plot results
 %through time
@@ -88,7 +92,11 @@ h5write('Scenario_integrated.h5', '/Solutions', sol)
 %% Componentwise Plots
 tiledlayout(5,1)
 nexttile
+<<<<<<< Updated upstream
 timeslice = 80;
+=======
+timeslice = 10;
+>>>>>>> Stashed changes
 plot(depths,sol(timeslice,:,1));
 xlabel('Depth (cm)')
 title('Aragonite')
