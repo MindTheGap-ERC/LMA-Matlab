@@ -1,4 +1,9 @@
 function sol=LMA_solve(AragoniteInitial,CalciteInitial,CaInitial,CO3Initial,PorInitial,AragoniteSurface,CalciteSurface,CaSurface,CO3Surface,PorSurface,times,depths,sedimentationrate,k1,k2,k3,k4,m1,m2,n1,n2,b,beta,rhos,rhow,rhos0,KA,KC,muA,D0Ca,PhiNR,PhiInfty,options,Phi0,DCa,DCO3,DeepLimit,ShallowLimit, PhiIni, dissolve_aragonite,include_reactions)
+% solve system of PDEs defined by L'Heureux based on passed parameters
+% calls Matlab internal procedure "pdepe" to solve the PDEs, see doc pdepe
+% for details.
+
+
 %% Define Local constants
 Xstar=D0Ca./sedimentationrate; % eq 39
 Tstar=Xstar/sedimentationrate; % eq 39

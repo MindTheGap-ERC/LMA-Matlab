@@ -1,3 +1,10 @@
+%% Model Limestone-Marl alternations using the model by L'Heureux (2018)
+% calls "LMA_solve.m", which used the Matlab internal procedure "pdepe" to
+% solve the system of PDEs described in L'Heureux (2018)
+
+% modify parameters in this file to change the scenario
+% to run, use "run("scenarioA.m")" in the console
+
 %% Parameters for Scenario A
 %Taken from table 1 (p. 7)
 KC=10^(-6.37);
