@@ -1,5 +1,7 @@
 # LMA-Matlab
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.12805858.svg)](https://doi.org/10.5281/zenodo.12805858)
+
 Matlab implementation of the diagenetic reactive-transport model by [L'Heureux (2018)](https://doi.org/10.1155/2018/4968315)
 
 ## Authors
@@ -34,6 +36,14 @@ in the Matlab console. Make sure the file is on your search path. If you want to
 * _LMA_solve.m_ : Solver for the PDE system
 * _README.md_ : Readme file
 * _ScenarioA.m_ : Parameters for scenario A from L'Heureux (2018)
+
+## Citation
+
+To cite this software please use
+
+* Hohmann, N., & Spreeuw, H. (2024). Matlab implementation if the reactive-transport diagenetic model by L'Heureux (2018) (v1.0.0). Zenodo. https://doi.org/10.5281/zenodo.12805858
+
+or see the information in the CITATION.cff file.
 
 ## Copyright
 

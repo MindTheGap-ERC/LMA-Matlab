@@ -19,7 +19,17 @@ authors:
     family-names: Spreeuw
     email: h.spreeuw@esciencecenter.nl
     affiliation: Netherlands eScience Center
+    orcid: 'https://orcid.org/0000-0002-5057-0322'
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.12805858
+    description: Archived v1.0.0 on Zenodo
 repository-code: 'https://github.com/MindTheGap-ERC/LMA-Matlab'
+abstract: >-
+  Matlab implementation of the early diagenetic model by
+  L'Heureux (2018), https://doi.org/10.1155/2018/4968315.
+  Models dissolution and precipitation of Aragonite and
+  Calcite in a variable-porosity system.
 keywords:
   - diagenesis
   - aragonite
@@ -31,3 +41,6 @@ keywords:
   - sedimentology
   - paleoclimate
 license: Apache-2.0
+commit: 11e90b449f245114dc51f41275dc84bc07dba592
+version: 1.0.0
+date-released: '2024-07-24'
