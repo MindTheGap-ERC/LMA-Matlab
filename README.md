@@ -16,6 +16,25 @@ email: h.spreeuw [at] esciencecenter.nl
 Web page: [www.esciencecenter.nl/team/dr-hanno-spreeuw/](https://www.esciencecenter.nl/team/dr-hanno-spreeuw)  
 ORCID: [0000-0002-5057-0322](https://orcid.org/0000-0002-5057-0322)
 
+## Usage
+
+Run
+
+```Matlab
+run("ScenarioA.m")
+```
+
+in the Matlab console. Make sure the file is on your search path. If you want to modify the scenario, go to "scenarioA.m" and modify the paramters.
+
+## Repository structure
+
+* _.gitignore_ : untracked files
+* _CITATION.cff_ : citation information
+* _LICENSE_ : Apache 2.0 license text
+* _LMA_solve.m_ : Solver for the PDE system
+* _README.md_ : Readme file
+* _ScenarioA.m_ : Parameters for scenario A from L'Heureux (2018)
+
 ## Copyright
 
 Copyright 2023 Netherlands eScience Center and Utrecht University
